@@ -74,6 +74,12 @@ let movies = [
 
 app.use(morgan('combined', {stream: accessLogStream}));
 
+app.use('/documentation.html', express.static('public'));
+
+// app.get('/documentation.html', (req, res) => {
+//     res.sendFile('public/documentation.html', { root: __dirname });
+// });
+  
 
 app.get('/movies', (req, res) => {
     res.json(movies);
@@ -83,11 +89,11 @@ app.get('/', (req, res) => {
     res.send('Welcome to my api titled "myFlix"');
 });
 
-app.get('/documentation.html', (req, res) => {
-    res.sendFile('public/documentation.html', { root: __dirname });
-  });
+
+
 
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
+
 
