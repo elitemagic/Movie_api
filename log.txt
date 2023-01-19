@@ -84,3 +84,6 @@
 ::1 - - [19/Jan/2023:00:15:08 +0000] "GET / HTTP/1.1" 304 - "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 ::1 - - [19/Jan/2023:00:15:15 +0000] "GET /documentation.html/ HTTP/1.1" 200 427 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 ::1 - - [19/Jan/2023:00:16:08 +0000] "GET /documentation.html/ HTTP/1.1" 200 421 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+::1 - - [19/Jan/2023:00:19:06 +0000] "GET /documentation.html/ HTTP/1.1" 404 158 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+::1 - - [19/Jan/2023:00:19:33 +0000] "GET /public/documentation.html/ HTTP/1.1" 404 165 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
+::1 - - [19/Jan/2023:00:19:38 +0000] "GET /public/documentation HTTP/1.1" 404 159 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
