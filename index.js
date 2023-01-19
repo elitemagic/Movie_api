@@ -1,6 +1,6 @@
 const http = require('http'),
-    url = require('url'),
     express = require('express'),
+    url = require('url'),
     morgan = require('morgan'),
     fs = require('fs'),
     path = require('path');
@@ -76,6 +76,8 @@ app.use(morgan('combined', {stream: accessLogStream}));
 
 app.use('/documentation.html', express.static('public'));
 
+// app.use('/documentation.html', express.static(path.join(__dirname, 'public')));
+
 // app.get('/documentation.html', (req, res) => {
 //     res.sendFile('public/documentation.html', { root: __dirname });
 // });
@@ -90,6 +92,10 @@ app.get('/', (req, res) => {
 });
 
 
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 
 app.listen(8080, () => {
