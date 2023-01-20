@@ -1,13 +1,14 @@
-const http = require('http');
-    express = require('express');
-    url = require('url');
-    morgan = require('morgan');
-    fs = require('fs');
+const http = require('http'),
+    express = require('express'),
+    url = require('url'),
+    fs = require('fs'),
+    morgan = require('morgan'),
     path = require('path');
 
 const app = express();
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
+
 
 let movies = [
     {
@@ -72,7 +73,6 @@ let movies = [
     }
 ];
 
-app.use(morgan('combined', {stream: accessLogStream}));
 
 app.get('/documentation', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'documentation.html'));
@@ -87,6 +87,9 @@ app.get('/', (req, res) => {
 });
 
 
+app.use(morgan('combined', {stream: accessLogStream}));
+
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
@@ -96,8 +99,3 @@ app.use((err, req, res, next) => {
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
-
-
-
-
-
