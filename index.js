@@ -1,14 +1,14 @@
-const http = require('http'),
-    express = require('express'),
-    url = require('url'),
-    fs = require('fs'),
-    morgan = require('morgan'),
+const http = require('http');
+    express = require('express');
+    url = require('url');
+    morgan = require('morgan');
     path = require('path');
+    fs = require('fs');
+
 
 const app = express();
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
-
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'});
 
 let movies = [
     {
@@ -87,7 +87,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use(morgan('combined', {stream: accessLogStream}));
+app.use(morgan('common', { stream: accessLogStream}));
 
 
 app.use((err, req, res, next) => {
