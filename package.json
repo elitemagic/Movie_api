@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "index.js",
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
@@ -11,7 +13,8 @@
     "body-parser": "^1.20.1",
     "express": "^4.18.2",
     "express-static": "^1.2.6",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "uuid": "^9.0.0"
   },
   "repository": {
     "type": "git",
@@ -22,5 +25,8 @@
     "url": "https://github.com/elitemagic/Movie_api/issues"
   },
   "homepage": "https://github.com/elitemagic/Movie_api#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
