@@ -18,20 +18,32 @@ mongoose.connect('mongodb://127.0.0.1/cfDB', {
     useUnifiedTopology: true
  });
 
- app.use(bodyParser.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middle ware function
 
- app.use(morgan("common"));
+app.use(morgan("common"));
 
-// Landing page
+let auth = require('./auth')(app);
+
+// To require passport module and import passport.js file
+const passport = require('passport');
+ require('./passport');
+
+
+// Message displayed on landing page
 app.get("/", (req, res) => {
     res.send("Welcome to myFlix!");
 });
 
 // Return details of all movies
-app.get("/movies", (req, res) => {
+app.get("/movies", passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(201).json(movies);
+  })
+  .catch((error) => {
+    console.error(error);
+    res.status(500).send('Error: ' + error);
   });
 });
 
@@ -84,7 +96,7 @@ app.post('/users', (req, res) => {
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
-      return res.status(400).send(req.body.Username + 'already exists');
+      return res.status(400).send(req.body.Username + ' already exists');
       } else {
       Users
         .create({
