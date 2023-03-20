@@ -144,7 +144,7 @@ app.post('/users',
     });
 });
 
-update a user via username
+// update a user via username
 app.put('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndUpdate({Username: req.params.Username}, { $set: {
     Username: req.body.Username,
@@ -179,7 +179,7 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 
 
 
-Add a movie to a user's list of favorites
+// Add a movie to a user's list of favorites
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
@@ -196,7 +196,7 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
 });
 
 
-Delete favourite movie from users profile
+// Delete favourite movie from users profile
 app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndUpdate ({Username: req.params.Username } , { $pull: {FavoriteMovies: req.params.MovieID }
   },
@@ -211,7 +211,7 @@ app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {ses
   });
 });
 
-Delete a user by username
+// Delete a user by username
 app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
   Users.findOneAndRemove({ Username: req.params.Username })
     .then((user) => {
@@ -235,13 +235,14 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
-});
 
 // app.listen(8080, () => {
 // console.log('Your app is listening on port 8080.');
 // }); 
+
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});
 
 
