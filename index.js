@@ -114,7 +114,11 @@ app.post('/users',
 
     let hashedPassword = Users.hashPassword(req.body.Password);
 
-    Users.findOne({ Username: req.body.Username })
+    const options = {
+      timeout: 30000
+    };
+
+    Users.findOne({ Username: req.body.Username }, options)
 
     .then((user) => {
       if (user) {
