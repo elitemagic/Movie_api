@@ -19,11 +19,16 @@ mongoose.connect('mongodb://127.0.0.1/cfDB', {
  });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middle ware function
+app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
 
 app.use(morgan("common"));
 
 let auth = require('./auth')(app);
+
+const cors = require('cors');
+app.use(cors());
+
+const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
  require('./passport');
@@ -91,7 +96,19 @@ app.get("/users", passport.authenticate('jwt', {session: false}), (req, res) => 
 
 
 // add a new user
-app.post('/users', (req, res) => {
+app.post('/users', [
+  check('Username', 'Username is required').isLength({min: 6}),
+  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+  check('Password', 'Password is required').not().isEmpty(),
+  check('Email', 'Email does not appear to be valid').isEmail()
+], (req, res) => {
+  
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
+  let hashedPassword = Users.hashPassword(req.body.Password);
   Users.findOne({ Username: req.body.Username })
   .then((user) => {
     if (user) {
