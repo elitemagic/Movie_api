@@ -13,10 +13,12 @@ const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Directors;
 
-mongoose.connect('mongodb://127.0.0.1:27017/test', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
- });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// mongoose.connect('mongodb://127.0.0.1:27017/test', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+//  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
