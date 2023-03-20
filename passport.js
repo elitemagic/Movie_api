@@ -26,7 +26,11 @@ passport.use(new LocalStrategy({
   
       console.log('finished');
       return callback(null, user);
-    });
+    })
+    .catch((error) => {
+        console.log(error);
+        return callback(error,false);
+    })
   }));
 
 
