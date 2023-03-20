@@ -15,7 +15,7 @@ const Directors = Models.Directors;
 
 // mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.connect('mongodb://127.0.0.1:27017/cfDB', {
+mongoose.connect('mongodb://127.0.0.1/cfDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
  });
