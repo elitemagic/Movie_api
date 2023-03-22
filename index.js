@@ -94,15 +94,13 @@ app.get("/users", passport.authenticate('jwt', {session: false}), (req, res) => 
 
 
 // add a new user
-app.post('/users', 
-  [ 
+app.post('/users', [ 
   check('Username', 'Username is required').isLength({min: 4}),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
   check('Email', 'Email does not appear to be valid').isEmail()
-  ],
-   (req, res) => {
-    
+  ], (req, res) => {
+
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
@@ -112,55 +110,51 @@ app.post('/users',
 
 
     Users.findOne({ Username: req.body.Username })
-
     .then((user) => {
       if (user) {
-        return res.status(400).send(req.body.Username + ' already exists');
+        return res.status(400).send(req.body.Username + 'already exists');
       } else {
-        Users.create({
-          Username: req.body.Username,
-          Password: hashedPassword,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday
-        })
-        .then((user) =>{res.status(201).json(user) })
-        .catch((err) => {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: hashedPassword,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) =>{res.status(201).json(user) })
+          .catch((err) => {
           console.error(err);
           res.status(500).send('Error: ' + err);
-        })
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
+          })
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
+      });
 });
+
 
 // update a user via username
 app.put('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
-  const promise = Users.findOneAndUpdate({Username: req.params.Username}, { $set: {
-    Username: req.body.Username,
-    Password: req.body.Password,
-    Email: req.body.Email,
-    Birthday: req.body.Birthday
-  } 
-},
-{ new: true })
-.exec();
-
-  promise.then ((updatedUser) => {
+  Users.findOneAndUpdate({Username: req.params.Username}, { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true },
+  (err, updatedUser) => {
+    if (err) {
+     console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
     res.json(updatedUser);
+    }
   });
 });
-
-// (err, updatedUser) => {
-//   if (err) {
-//     console.error(err);
-//     res.status(500).send('Error: ' + err);
-//   } else {
-//     res.json(updatedUser);
-//   }
-//   });
 
 
 
@@ -190,17 +184,6 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {sessi
    });
 });
 
-   
-   // This line makes sure that the updated document is returned
-//   (err, updatedUser) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(500).send('Error: ' + err);
-//     } else {
-//       res.json(updatedUser);
-//     }
-//   });
-// });
 
 
 // Delete favourite movie from users profile
