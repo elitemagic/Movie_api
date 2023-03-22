@@ -29,7 +29,7 @@ app.use(cors());
 const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
- require('./passport');
+require('./passport');
 
 
 // message displayed on landing page
