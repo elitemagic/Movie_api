@@ -110,18 +110,14 @@ app.post('/users',
 
     let hashedPassword = Users.hashPassword(req.body.Password);
 
-    const options = {
-      timeout: 30000
-    };
 
-    Users.findOne({ Username: req.body.Username }, options)
+    Users.findOne({ Username: req.body.Username })
 
     .then((user) => {
       if (user) {
         return res.status(400).send(req.body.Username + ' already exists');
       } else {
-        Users
-        .create({
+        Users.create({
           Username: req.body.Username,
           Password: hashedPassword,
           Email: req.body.Email,
@@ -142,23 +138,30 @@ app.post('/users',
 
 // update a user via username
 app.put('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
-  Users.findOneAndUpdate({Username: req.params.Username}, { $set: {
+  const promise = Users.findOneAndUpdate({Username: req.params.Username}, { $set: {
     Username: req.body.Username,
     Password: req.body.Password,
     Email: req.body.Email,
     Birthday: req.body.Birthday
   } 
 },
-{ new: true },
-(err, updatedUser) => {
-  if (err) {
-    console.error(err);
-    res.status(500).send('Error: ' + err);
-  } else {
+{ new: true })
+.exec();
+
+  promise.then ((updatedUser) => {
     res.json(updatedUser);
-  }
   });
 });
+
+// (err, updatedUser) => {
+//   if (err) {
+//     console.error(err);
+//     res.status(500).send('Error: ' + err);
+//   } else {
+//     res.json(updatedUser);
+//   }
+//   });
+
 
 
 // get user by name
@@ -167,9 +170,9 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
   .then((users) => {
     res.json(users);
   })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).send('Error: ' + error);
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
   });
 });
 
@@ -177,19 +180,27 @@ app.get('/users/:Username', passport.authenticate('jwt', {session: false}), (req
 
 // Add a movie to a user's list of favorites
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', {session: false}), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, {
+  const promise = Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
-   { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      res.json(updatedUser);
-    }
-  });
+   { new: true }).exec();
+   
+   promise.then((updatedUser) => {
+    res.json(updatedUser);
+   });
 });
+
+   
+   // This line makes sure that the updated document is returned
+//   (err, updatedUser) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(500).send('Error: ' + err);
+//     } else {
+//       res.json(updatedUser);
+//     }
+//   });
+// });
 
 
 // Delete favourite movie from users profile
