@@ -34,8 +34,8 @@
     "url": "https://github.com/elitemagic/Movie_api/issues"
   },
   "homepage": "https://github.com/elitemagic/Movie_api#readme",
-  "description": "",
   "devDependencies": {
     "nodemon": "^2.0.20"
-  }
+  },
+  "description": ""
 }

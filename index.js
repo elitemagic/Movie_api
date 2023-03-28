@@ -4,38 +4,56 @@ const uuid = require('uuid');
 const fs = require("fs");
 const path = require("path");
 const morgan = require('morgan');
-const app = express();
+
 const mongoose = require('mongoose');
 const Models = require('./models.js');
+
+
+// Initialize express
+const app = express();
+
 
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Directors;
 
+
+// Database
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 // mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
+
+// Body parser (USE request)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
 
+
+// Logging
 app.use(morgan("common"));
 
+// Auth
 let auth = require('./auth')(app);
-
-const cors = require('cors');
-app.use(cors());
-
-const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
 require('./passport');
+
+const { check, validationResult } = require('express-validator');
+
+
+// Cors middleware allowing all Cross Origin Requests
+const cors = require('cors');
+app.use(cors());
+
 
 
 // message displayed on landing page
 app.get("/", (req, res) => {
   res.send("Welcome to myFlix!");
 });
+
+
+// API endpoints
 
 // Return details of all movies
 app.get("/movies", passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -244,22 +262,26 @@ app.delete('/users/:Username', passport.authenticate('jwt', {session: false}), (
     });
 });
 
-
+// Serve static files
 app.use("/documentation", express.static("public"));
 
+
+// Error handler
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke');
 });
 
 
-// app.listen(8080, () => {
-// console.log('Your app is listening on port 8080.');
-// }); 
+
+// Listen for requests
 
 const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
 
+// app.listen(8080, () => {
+// console.log('Your app is listening on port 8080.');
+// }); 
 
