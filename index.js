@@ -24,6 +24,7 @@ const Directors = Models.Directors;
 // mongoose.set('strictQuery', false);
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+
 // Body parser (USE request)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
