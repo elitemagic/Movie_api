@@ -22,7 +22,7 @@ const Directors = Models.Directors;
 
 // Database
 // mongoose.set('strictQuery', false);
-mongoose.connect( "process.env.CONNECTION_URI", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Body parser (USE request)
 app.use(bodyParser.json());
