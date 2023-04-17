@@ -22,7 +22,7 @@ const Directors = Models.Directors;
 
 // Database
 // mongoose.set('strictQuery', false);
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( "process.env.CONNECTION_URI", { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Body parser (USE request)
 app.use(bodyParser.json());
@@ -276,7 +276,7 @@ app.use((err, req, res, next) => {
 
 // Listen for requests
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 10000;
   app.listen(port, '0.0.0.0',() => {
   console.log('Listening on Port ' + port);
   });
