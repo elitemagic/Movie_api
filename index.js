@@ -19,10 +19,10 @@ const Genres = Models.Genre;
 const Directors = Models.Directors;
 
 
-// Database
-mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-// mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
+// Database
+// mongoose.set('strictQuery', false);
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Body parser (USE request)
 app.use(bodyParser.json());
@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware funct
 app.use(morgan("common"));
 
 // Auth
-let auth = require('./auth')(app);
+const auth = require('./auth')(app);
 
 const passport = require('passport');
 require('./passport');
@@ -276,10 +276,10 @@ app.use((err, req, res, next) => {
 
 // Listen for requests
 
-const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
-});
+  const port = process.env.PORT || 3000;
+  app.listen(port, '0.0.0.0',() => {
+  console.log('Listening on Port ' + port);
+  });
 
 // app.listen(8080, () => {
 // console.log('Your app is listening on port 8080.');
