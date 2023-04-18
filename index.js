@@ -54,7 +54,7 @@ app.use((req, res, next) => {
 
 // message displayed on landing page
 app.get("/", (req, res) => {
-  res.send("Welcome to myFlix!!");
+  res.send("Welcome to myFlix!!!");
 });
 
 
