@@ -22,7 +22,8 @@ const Directors = Models.Directors;
 
 // Database
 // mongoose.set('strictQuery', false);
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( "mongodb://localhost:27017/cfDB", { useNewUrlParser: true, useUnifiedTopology: true });
+
 
 // Body parser (USE request)
 app.use(bodyParser.json());
@@ -43,7 +44,12 @@ const { check, validationResult } = require('express-validator');
 
 // Cors middleware allowing all Cross Origin Requests
 const cors = require('cors');
-app.use(cors());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 
 
 
@@ -276,7 +282,7 @@ app.use((err, req, res, next) => {
 
 // Listen for requests
 
-  const port = process.env.PORT || 10000;
+  const port = process.env.PORT || 3000;
   app.listen(port, '0.0.0.0',() => {
   console.log('Listening on Port ' + port);
   });
