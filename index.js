@@ -8,15 +8,13 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
-
-// Initialize express
-const app = express();
-
-
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Directors;
+
+// Initialize express
+const app = express();
 
 
 
@@ -33,6 +31,23 @@ app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware funct
 // Logging
 app.use(morgan("common"));
 
+
+// Cors middleware allowing all Cross Origin Requests
+const cors = require('cors');
+
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'https://my-flix-service.onrender.com/', 'http://localhost:1234'];
+
+app.use(cors({
+ origin: (origin, callback) => {
+   if(!origin) return callback(null, true);
+   if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+     let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+     return callback(new Error(message ), false);
+   }
+   return callback(null, true);
+ }
+}));
+
 // Auth
 const auth = require('./auth')(app);
 
@@ -42,19 +57,9 @@ require('./passport');
 const { check, validationResult } = require('express-validator');
 
 
-// Cors middleware allowing all Cross Origin Requests
-const cors = require('cors');
-app.use(cors());
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-
-
 // message displayed on landing page
 app.get("/", (req, res) => {
-  res.send("Welcome to myFlix!!!");
+  res.send("Welcome to myFlix!!");
 });
 
 
@@ -281,7 +286,7 @@ app.use((err, req, res, next) => {
 
 // Listen for requests
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 8080;
   app.listen(port, '0.0.0.0',() => {
   console.log('Listening on Port ' + port);
   });
