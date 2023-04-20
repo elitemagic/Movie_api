@@ -30,6 +30,9 @@
     "type": "git",
     "url": "git+https://github.com/elitemagic/Movie_api.git"
   },
+  "engines": {
+    "node": ">=14 <15"
+  },
   "keywords": [],
   "bugs": {
     "url": "https://github.com/elitemagic/Movie_api/issues"
