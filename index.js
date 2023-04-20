@@ -8,19 +8,20 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
-const Movies = Models.Movie;
-const Users = Models.User;
-const Genres = Models.Genre;
-const Directors = Models.Directors;
 
 // Initialize express
 const app = express();
 
 
+const Movies = Models.Movie;
+const Users = Models.User;
+const Genres = Models.Genre;
+const Directors = Models.Directors;
+
 
 // Database
-// mongoose.set('strictQuery', false);
-mongoose.connect( "mongodb://localhost:27017/cfDB", { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 // Body parser (USE request)
@@ -31,14 +32,8 @@ app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware funct
 // Logging
 app.use(morgan("common"));
 
-
-// Cors middleware allowing all Cross Origin Requests
-const cors = require('cors');
-app.use(cors());
-
-
 // Auth
-const auth = require('./auth')(app);
+let auth = require('./auth')(app);
 
 const passport = require('passport');
 require('./passport');
@@ -46,9 +41,15 @@ require('./passport');
 const { check, validationResult } = require('express-validator');
 
 
+// Cors middleware allowing all Cross Origin Requests
+const cors = require('cors');
+app.use(cors());
+
+
+
 // message displayed on landing page
 app.get("/", (req, res) => {
-  res.send("Welcome to myFlix!!");
+  res.send("Welcome to myFlix!");
 });
 
 
@@ -275,12 +276,11 @@ app.use((err, req, res, next) => {
 
 // Listen for requests
 
-  const port = process.env.PORT || 8080;
-  app.listen(port, '0.0.0.0',() => {
-  console.log('Listening on Port ' + port);
-  });
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});
 
 // app.listen(8080, () => {
 // console.log('Your app is listening on port 8080.');
 // }); 
-
