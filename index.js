@@ -123,7 +123,7 @@ app.post('/users',
 //or use .isLength({min: 5}) which means
 //minimum value of 5 characters are only allowed
 [
-  check('Username', 'Username is required').isLength({min: 5}),
+  check('Username', 'Username is required with minimum character length of 4').isLength({min: 4}),
   check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
   check('Password', 'Password is required').not().isEmpty(),
   check('Email', 'Email does not appear to be valid').isEmail()
