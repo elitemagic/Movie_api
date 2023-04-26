@@ -24,7 +24,7 @@ const Directors = Models.Directors;
 
 
 // Database
-mongoose.connect('mongodb+srv://toddmerlin:AnkWA7L5aXk3dfRn@myflixdb.litsrkf.mongodb.net/cfDB?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 // mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Cors middleware allowing all Cross Origin Requests
