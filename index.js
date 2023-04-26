@@ -102,6 +102,7 @@ app.get("/movies/director/:directorName", (req,res) => {
 
 // Return details of all users
 app.get("/users", (req, res) => {
+  console.log('Received request to create user with body:', req.body);
   Users.find()
   .then((users) => {
     res.status(201).json(users);
