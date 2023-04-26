@@ -12,6 +12,10 @@ const Models = require('./models.js');
 // Initialize express
 const app = express();
 
+// Body parser (USE request)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
+
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -24,9 +28,9 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 // mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-// Body parser (USE request)
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
+// Cors middleware allowing all Cross Origin Requests
+const cors = require('cors');
+app.use(cors());
 
 
 // Logging
@@ -39,12 +43,6 @@ const passport = require('passport');
 require('./passport');
 
 const { check, validationResult } = require('express-validator');
-
-
-// Cors middleware allowing all Cross Origin Requests
-const cors = require('cors');
-app.use(cors());
-
 
 
 // message displayed on landing page
@@ -103,7 +101,7 @@ app.get("/movies/director/:directorName", (req,res) => {
 }); 
 
 // Return details of all users
-app.get("/users", passport.authenticate('jwt', {session: false}), (req, res) => {
+app.get("/users", (req, res) => {
   Users.find()
   .then((users) => {
     res.status(201).json(users);
@@ -117,51 +115,51 @@ app.get("/users", passport.authenticate('jwt', {session: false}), (req, res) => 
 
 // add a new user
 app.post('/users',
-// Validation logic here for request
-//you can either use a chain of methods like .not().isEmpty()
-//which means "opposite of isEmpty" in plain english "is not empty"
-//or use .isLength({min: 5}) which means
-//minimum value of 5 characters are only allowed
-[
-  check('Username', 'Username is required with minimum character length of 4').isLength({min: 4}),
-  check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-  check('Password', 'Password is required').not().isEmpty(),
-  check('Email', 'Email does not appear to be valid').isEmail()
-], (req, res) => {
+  // Validation logic here for request
+  //you can either use a chain of methods like .not().isEmpty()
+  //which means "opposite of isEmpty" in plain english "is not empty"
+  //or use .isLength({min: 5}) which means
+  //minimum value of 5 characters are only allowed
+  [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
 
-// check the validation object for errors
-  let errors = validationResult(req);
+  // check the validation object for errors
+    let errors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
-  let hashedPassword = Users.hashPassword(req.body.Password);
-
-  Users.findOne({ Username: req.body.Username }).maxTimeMS(30000) // Search to see if a user with the requested username already exists
-  .then((user) => {
-    if (user) {
-//If the user is found, send a response that it already exists
-      return res.status(400).send(req.body.Username + ' already exists');
-      } else {
-      Users.create({
-        Username: req.body.Username,
-        Password: hashedPassword,
-        Email: req.body.Email,
-        Birthday: req.body.Birthday
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
+      .then((user) => {
+        if (user) {
+          //If the user is found, send a response that it already exists
+          return res.status(400).send(req.body.Username + ' already exists');
+        } else {
+          Users
+            .create({
+              Username: req.body.Username,
+              Password: hashedPassword,
+              Email: req.body.Email,
+              Birthday: req.body.Birthday
+            })
+            .then((user) => { res.status(201).json(user) })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send('Error: ' + error);
+            });
+        }
       })
-      .then((user) => { res.status(201).json(user) })
       .catch((error) => {
         console.error(error);
         res.status(500).send('Error: ' + error);
       });
-    }
-  })
-  .catch((error) => {
-    console.error(error);
-    res.status(500).send('Error: ' + error);
   });
-});
 
 
 // update a user via username
@@ -276,7 +274,7 @@ app.use((err, req, res, next) => {
 
 // Listen for requests
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
 });
