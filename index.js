@@ -5,6 +5,9 @@ const fs = require("fs");
 const path = require("path");
 const morgan = require('morgan');
 
+// Initialize express
+const app = express();
+
 // Body parser (USE request)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
@@ -50,9 +53,6 @@ const { check, validationResult } = require('express-validator');
 // Database
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 // mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Initialize express
-const app = express();
 
 // message displayed on landing page
 app.get("/", (req, res) => {
