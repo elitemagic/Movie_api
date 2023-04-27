@@ -5,55 +5,54 @@ const fs = require("fs");
 const path = require("path");
 const morgan = require('morgan');
 
-const mongoose = require('mongoose');
-const Models = require('./models.js');
-
-
-// Initialize express
-const app = express();
-
 // Body parser (USE request)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); //bodyParser middleware function
 
+// Cors middleware allowing all Cross Origin Requests
+const cors = require('cors');
+app.use(cors());
+  
+// const cors = require('cors');
+// app.use(cors({
+//  origin: (origin, callback) => {
+//    if(!origin) return callback(null, true);
+//    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+//      let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
+//      return callback(new Error(message ), false);
+//    }
+//    return callback(null, true);
+//  }
+// }));
+
+// Auth
+let auth = require('./auth')(app);
+
+// Logging
+app.use(morgan("common"));
+
+const passport = require('passport');
+require('./passport');
+
+const mongoose = require('mongoose');
+const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Directors;
 
+// connection to middleware
+accessLogStream = fs.createWriteStream(path.join(__dirname, './log.txt.log'), {flags: 'a'});
+
+const { check, validationResult } = require('express-validator');
 
 // Database
 mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 // mongoose.connect('mongodb://127.0.0.1:27017/cfDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
-// Cors middleware allowing all Cross Origin Requests
-const cors = require('cors');
-let allowedOrigins = ['http://localhost:3000', 'http://localhost:1234/login', 'https://my-flix-service.onrender.com/login'];
-
-app.use(cors({
- origin: (origin, callback) => {
-   if(!origin) return callback(null, true);
-   if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
-     let message = 'The CORS policy for this application doesn’t allow access from origin ' + origin;
-     return callback(new Error(message ), false);
-   }
-   return callback(null, true);
- }
-}));
-
-
-// Logging
-app.use(morgan("common"));
-
-// Auth
-let auth = require('./auth')(app);
-
-const passport = require('passport');
-require('./passport');
-
-const { check, validationResult } = require('express-validator');
-
+// Initialize express
+const app = express();
 
 // message displayed on landing page
 app.get("/", (req, res) => {
