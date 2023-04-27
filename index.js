@@ -29,7 +29,7 @@ mongoose.connect(process.env.CONNECTION_URI, { useNewUrlParser: true, useUnified
 
 // Cors middleware allowing all Cross Origin Requests
 const cors = require('cors');
-let allowedOrigins = ['http://localhost:3000', 'http://localhost:1234', 'https://my-flix-service.onrender.com'];
+let allowedOrigins = ['http://localhost:3000', 'http://localhost:1234/login', 'https://my-flix-service.onrender.com/login'];
 
 app.use(cors({
  origin: (origin, callback) => {
