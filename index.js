@@ -63,7 +63,7 @@ app.get("/", (req, res) => {
 // API endpoints
 
 // Return details of all movies
-app.get("/movies", (req, res) => {
+app.get("/movies", passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.find()
   .then((movies) => {
     res.status(201).json(movies);
@@ -75,7 +75,7 @@ app.get("/movies", (req, res) => {
 });
 
 // Return details of one movie by title
-app.get("/movies/:Title", (req, res) => {
+app.get("/movies/:Title", passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.findOne ({ Title: req.params.Title})
   .then ((movie) => {
     res.json(movie);
@@ -87,7 +87,7 @@ app.get("/movies/:Title", (req, res) => {
 });
 
 // Return description of a type of genre
-app.get("/movies/genre/:genreName", (req, res) => {
+app.get("/movies/genre/:genreName", passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.findOne ({ 'Genre.Name' : req.params.genreName })
   .then ((movie) => {
     res.json(movie.Genre);
@@ -99,7 +99,7 @@ app.get("/movies/genre/:genreName", (req, res) => {
 });
 
 // Return data about Director
-app.get("/movies/director/:directorName", (req,res) => {
+app.get("/movies/director/:directorName", passport.authenticate('jwt', {session: false}), (req,res) => {
   Movies.findOne ({ 'Director.Name' : req.params.directorName })
   .then ((movie) => {
     res.json(movie.Director);
@@ -110,7 +110,7 @@ app.get("/movies/director/:directorName", (req,res) => {
 }); 
 
 // Return details of all users
-app.get("/users", (req, res) => {
+app.get("/users", passport.authenticate('jwt', {session: false}), (req, res) => {
   console.log('Received request to create user with body:', req.body);
   Users.find()
   .then((users) => {
@@ -124,7 +124,7 @@ app.get("/users", (req, res) => {
 
 
 // add a new user
-app.post('/users',
+app.post('/users', passport.authenticate('jwt', {session: false}),
   // Validation logic here for request
   //you can either use a chain of methods like .not().isEmpty()
   //which means "opposite of isEmpty" in plain english "is not empty"
