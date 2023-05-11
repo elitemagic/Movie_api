@@ -69,7 +69,7 @@ app.get("/", (req, res) => {
 // Return details of all movies
 app.get(
   "/movies",
-  passport.authenticate("jwt", { session: false }),
+  //passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Movies.find()
       .then((movies) => {
@@ -200,10 +200,10 @@ app.post(
   }
 );
 
-// update a user via username
+// update a user via username endpoint
 app.put(
   "/users/:Username",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   [
     check("Username", "Username is required").isLength({ min: 5 }),
     check(
@@ -221,6 +221,8 @@ app.put(
       return res.status(422).json({ errors: errors.array() });
     }
 
+    console.log("New password:", req.body.Password);
+
     let hashedPassword = Users.hashPassword(req.body.Password);
 
     Users.findOneAndUpdate(
@@ -237,9 +239,10 @@ app.put(
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send("Error: " + err);
+          res.status(500).send("Error updating user information");
         } else {
-          res.json(updatedUser);
+          console.log("Updated user:", updatedUser);
+          res.status(200).json(updatedUser);
         }
       }
     );
