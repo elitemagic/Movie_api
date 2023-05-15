@@ -52,6 +52,7 @@ module.exports = (router) => {
     console.log("Request received in /login:", req.body);
     console.log("Trying to authenticate user...");
     passport.authenticate("local", { session: false }, (error, user, info) => {
+      console.log("Error and user:", error, user);
       if (error || !user) {
         console.log("Error or user not found:", error, user);
         return res.status(401).json({
