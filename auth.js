@@ -57,23 +57,23 @@ module.exports = (router) => {
           message: "Something is not right",
           user: user,
         });
-      }
-      if (info && info.message === "Incorrect password.") {
+      } else if (info && info.message === "Incorrect password.") {
         console.log("Incorrect password:", user);
         return res.status(401).json({
           message: "Incorrect password",
           user: user,
         });
+      } else {
+        req.login(user, { session: false }, (error) => {
+          if (error) {
+            console.log("Successful login:", user.Username);
+            res.send(error);
+          }
+          let token = generateJWTToken(user.toJSON());
+          console.log("I have a user ", { user, token });
+          return res.json({ user, token });
+        });
       }
-      req.login(user, { session: false }, (error) => {
-        if (error) {
-          console.log("Successful login:", user.Username);
-          res.send(error);
-        }
-        let token = generateJWTToken(user.toJSON());
-        console.log("I have a user ", { user, token });
-        return res.json({ user, token });
-      });
     })(req, res);
   });
 };
