@@ -53,8 +53,14 @@ module.exports = (router) => {
     passport.authenticate("local", { session: false }, (error, user, info) => {
       if (error || !user) {
         console.log("Error or user not found:", error, user);
-        return res.status(400).json({
+        return res.status(401).json({
           message: "Something is not right",
+          user: user,
+        });
+      }
+      if (info && info.message === "Incorrect password.") {
+        return res.status(401).json({
+          message: "Incorrect password",
           user: user,
         });
       }
