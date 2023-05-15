@@ -59,6 +59,7 @@ module.exports = (router) => {
         });
       }
       if (info && info.message === "Incorrect password.") {
+        console.log("Incorrect password:", user);
         return res.status(401).json({
           message: "Incorrect password",
           user: user,
