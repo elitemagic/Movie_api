@@ -50,30 +50,31 @@ module.exports = (router) => {
 module.exports = (router) => {
   router.post("/login", (req, res) => {
     console.log("Request received in /login:", req.body);
+    console.log("Trying to authenticate user...");
     passport.authenticate("local", { session: false }, (error, user, info) => {
       if (error || !user) {
         console.log("Error or user not found:", error, user);
         return res.status(401).json({
-          message: "Something is not right",
+          message: "Something aint right",
           user: user,
         });
-      } else if (info && info.message === "Incorrect password.") {
+      }
+      if (info && info.message === "Incorrect password.") {
         console.log("Incorrect password:", user);
         return res.status(401).json({
           message: "Incorrect password",
           user: user,
         });
-      } else {
-        req.login(user, { session: false }, (error) => {
-          if (error) {
-            console.log("Successful login:", user.Username);
-            res.send(error);
-          }
-          let token = generateJWTToken(user.toJSON());
-          console.log("I have a user ", { user, token });
-          return res.json({ user, token });
-        });
       }
+      req.login(user, { session: false }, (error) => {
+        if (error) {
+          console.log("Successful login:", user.Username);
+          res.send(error);
+        }
+        let token = generateJWTToken(user.toJSON());
+        console.log("I have a user ", { user, token });
+        return res.json({ user, token });
+      });
     })(req, res);
   });
 };
