@@ -200,7 +200,7 @@ app.post(
   }
 );
 
-// update a user via username endpoint
+// update a user
 app.put(
   "/users/:Username",
   // passport.authenticate("jwt", { session: false }),
@@ -329,7 +329,7 @@ app.delete(
 // Delete a user by username
 app.delete(
   "/users/:Username",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
       .then((user) => {
