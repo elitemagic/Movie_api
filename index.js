@@ -305,6 +305,22 @@ app.post(
   }
 );
 
+// Retrive a list of user's list of favorites
+app.get(
+  "/users/:Username/movies/:MovieID",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Users.findOne({ Username: req.params.Username })
+      .then((users) => {
+        res.json(users);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
+
 // Delete favourite movie from users profile
 app.delete(
   "/users/:Username/movies/:MovieID",
