@@ -205,20 +205,23 @@ app.put(
   "/users/:Username",
   // passport.authenticate("jwt", { session: false }),
   [
-    check("Username", "Username is required").isLength({ min: 5 }),
+    check("Username", "Username is required").optional().isLength({ min: 5 }),
     check(
       "Username",
-      "Username contains non alphanumeric characters - not allowed."
-    ).isAlphanumeric(),
-    check("Password", "Password is required").not().isEmpty(),
-    check("Email", "Email does not appear to be valid").isEmail(),
+      "Username contains non-alphanumeric characters - not allowed."
+    )
+      .optional()
+      .isAlphanumeric(),
+    check("Password", "Password is required").optional().not().isEmpty(),
+    check("Email", "Email does not appear to be valid").optional().isEmail(),
+    check("Birthdate", "Birthdate is required").optional().notEmpty(),
   ],
   (req, res) => {
     // check the validation object for errors
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(423).json({ errors: errors.array() });
+      return res.status(422).json({ errors: errors.array() });
     }
 
     console.log("New password:", req.body.Password);
