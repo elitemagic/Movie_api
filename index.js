@@ -312,6 +312,7 @@ app.get(
   (req, res) => {
     Users.findOne({ Username: req.params.Username })
       .then((users) => {
+        console.log(users);
         res.json(users);
       })
       .catch((err) => {
