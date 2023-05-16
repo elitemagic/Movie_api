@@ -226,7 +226,9 @@ app.put(
 
     console.log("New password:", req.body.Password);
 
-    let hashedPassword = Users.hashPassword(req.body.Password);
+    let hashedPassword = req.body.Password
+      ? Users.hashPassword(req.body.Password)
+      : undefined;
 
     Users.findOneAndUpdate(
       { Username: req.params.Username },
