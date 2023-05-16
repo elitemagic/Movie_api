@@ -218,7 +218,7 @@ app.put(
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(423).json({ errors: errors.array() });
     }
 
     console.log("New password:", req.body.Password);
