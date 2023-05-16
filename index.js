@@ -310,9 +310,10 @@ app.get(
   "/users/:Username/movies/:MovieID",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log("Username:", req.params.Username);
     Users.findOne({ Username: req.params.Username })
       .then((users) => {
-        console.log(users);
+        console.log("User:", users);
         res.json(users);
       })
       .catch((err) => {
