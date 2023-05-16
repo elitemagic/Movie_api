@@ -132,7 +132,7 @@ app.get(
 // Return details of all users
 app.get(
   "/users",
-  passport.authenticate("jwt", { session: false }),
+  // passport.authenticate("jwt", { session: false }),
   (req, res) => {
     console.log("Received request to create user with body:", req.body);
     Users.find()
@@ -307,14 +307,16 @@ app.post(
 
 // Retrive a list of user's list of favorites
 app.get(
-  "/users/:Username/movies/:MovieID",
-  passport.authenticate("jwt", { session: false }),
+  "/users/:Username/favoriteMovies",
+  // passport.authenticate("jwt", { session: false })
   (req, res) => {
-    console.log("Username:", req.params.Username);
     Users.findOne({ Username: req.params.Username })
-      .then((users) => {
-        console.log("User:", users);
-        res.json(users);
+      .then((user) => {
+        if (!user) {
+          res.status(400).send(req.params.Username + " was not found.");
+        } else {
+          res.status(200).json(user.FavoriteMovies);
+        }
       })
       .catch((err) => {
         console.error(err);
