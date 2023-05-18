@@ -206,7 +206,6 @@ app.post(
 // update a user
 app.put(
   "/users/:Username",
-  // passport.authenticate("jwt", { session: false }),
   [
     check("Username", "Username is required").optional().isLength({ min: 5 }),
     check(
@@ -220,7 +219,6 @@ app.put(
     check("Birthdate", "Birthdate is required").optional().notEmpty(),
   ],
   (req, res) => {
-    // check the validation object for errors
     let errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -232,6 +230,8 @@ app.put(
     let hashedPassword = req.body.Password
       ? Users.hashPassword(req.body.Password)
       : undefined;
+
+    console.log("Hashed password:", hashedPassword);
 
     Users.findOneAndUpdate(
       { Username: req.params.Username },
