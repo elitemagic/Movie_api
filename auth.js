@@ -27,7 +27,7 @@ module.exports = (router) => {
             Username: req.body.Username,
             Password: hashedPassword,
             Email: req.body.Email,
-            Birthday: req.body.Birthday,
+            Birthdate: req.body.Birthdate,
           })
             .then((user) => {
               let token = generateJWTToken(user.toJSON());
