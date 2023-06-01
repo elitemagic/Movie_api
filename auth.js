@@ -44,10 +44,8 @@ module.exports = (router) => {
         res.status(500).send("Error: " + error);
       });
   });
-};
 
-// POST login
-module.exports = (router) => {
+  // POST login
   router.post("/login", (req, res) => {
     console.log("Request received in /login:", req.body);
     console.log("Trying to authenticate user...");
