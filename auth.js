@@ -1,6 +1,8 @@
 const jwtSecret = "your_jwt_secret";
 // This must match the key used in the JWTStrategy
 
+const { User } = require("./models.js");
+
 const jwt = require("jsonwebtoken"),
   passport = require("passport");
 
@@ -17,13 +19,13 @@ let generateJWTToken = (user) => {
 
 module.exports = (router) => {
   router.post("/signup", (req, res) => {
-    let hashedPassword = User.hashPassword(req.body.Password);
-    User.findOne({ Username: req.body.Username })
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
           return res.status(400).send(req.body.Username + " already exists");
         } else {
-          User.create({
+          Users.create({
             Username: req.body.Username,
             Password: hashedPassword,
             Email: req.body.Email,
