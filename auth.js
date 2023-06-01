@@ -1,7 +1,7 @@
 const jwtSecret = "your_jwt_secret";
 // This must match the key used in the JWTStrategy
 
-const { User } = require("./models.js");
+const Users = require("./models").User;
 
 const jwt = require("jsonwebtoken"),
   passport = require("passport");
