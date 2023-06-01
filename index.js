@@ -35,6 +35,7 @@ let auth = require("./auth")(app);
 app.use(morgan("common"));
 
 const passport = require("passport");
+
 require("./passport");
 
 const mongoose = require("mongoose");
@@ -257,15 +258,20 @@ app.put(
 app.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Users.findOne({ Username: req.user.username })
-      .then((user) => {
-        res.json(user);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
+  async (req, res) => {
+    try {
+      // Retrieve the logged-in user's information from the database
+      const user = await Users.findOne({ Username: req.user.username });
+
+      // Render the user profile view and pass the user object to the template
+      res.json(user);
+    } catch (error) {
+      // Handle any errors that occur during the retrieval of user information
+      console.error(error);
+      res
+        .status(500)
+        .send("An error occurred while retrieving user information");
+    }
   }
 );
 
