@@ -1,8 +1,6 @@
 const jwtSecret = "your_jwt_secret";
 // This must match the key used in the JWTStrategy
 
-const Users = require("./models").User;
-
 const jwt = require("jsonwebtoken"),
   passport = require("passport");
 
@@ -46,9 +44,10 @@ module.exports = (router) => {
         res.status(500).send("Error: " + error);
       });
   });
+};
 
-  // POST login
-
+// POST login
+module.exports = (router) => {
   router.post("/login", (req, res) => {
     console.log("Request received in /login:", req.body);
     console.log("Trying to authenticate user...");
